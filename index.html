@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Azure Launcher — لانشر ماين كرافت</title>
+<meta name="description" content="Azure Launcher: لانشر ماين كرافت مفتوح المصدر، يدعم Fabric و Forge و Quilt و NeoForge، مودات Modrinth و CurseForge، عربي وإنجليزي.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232f8bff'/%3E%3Cpath d='M32 12 18 46h6l8-20 8 20h6z' fill='%23e8f6ff'/%3E%3Cpath d='M16 54q8-8 16 0t16 0' stroke='%2338e1ff' stroke-width='4' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--abyss:#050a15;--panel:rgba(14,27,52,.66);--line:rgba(130,175,255,.16);--line2:rgba(130,175,255,.3);--foam:#e8f3ff;--mist:#9bb0d0;--az:#2f8bff;--cyan:#38e1ff;font-family:'Tajawal','Segoe UI',Tahoma,system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--abyss);color:var(--foam);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(120% 80% at 50% 0,#0c1c3f,var(--abyss) 60%)}
+.bg i{position:absolute;border-radius:50%;filter:blur(110px);opacity:.45}
+.bg i:first-child{width:520px;height:520px;background:var(--az);top:-200px;inset-inline-start:-100px}
+.bg i:last-child{width:420px;height:420px;background:rgba(56,225,255,.4);top:420px;inset-inline-end:-120px}
+.wrap{max-width:1120px;margin:auto;padding:0 24px}
+nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);background:rgba(5,10,21,.7);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:14px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px}
+.logo b{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--az),var(--cyan));color:#04101f}
+.logo svg{fill:#04101f;stroke:none;width:18px;height:18px}
+.links{display:flex;gap:6px;align-items:center}
+.links a,.links button{padding:8px 14px;border-radius:10px;color:var(--mist);font-weight:500;font-size:15px;transition:.2s}
+.links a:hover,.links button:hover{color:var(--foam);background:rgba(130,175,255,.1)}
+.links button{border:1px solid var(--line2);cursor:pointer;background:none;font-family:inherit}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 26px;border-radius:14px;font-weight:700;font-size:17px;border:1px solid var(--line2);background:rgba(130,175,255,.08);transition:transform .15s,filter .2s,background .2s;cursor:pointer;font-family:inherit;color:var(--foam)}
+.btn:hover{background:rgba(130,175,255,.16);transform:translateY(-2px)}
+.btn.pri{background:linear-gradient(135deg,#6fb8ff,var(--cyan));color:#04101f;border-color:transparent;box-shadow:0 16px 40px -14px var(--cyan);font-size:19px;padding:16px 32px}
+.btn.pri:hover{filter:brightness(1.08)}
+.hero{padding:84px 0 70px;text-align:center;position:relative}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:99px;border:1px solid var(--line2);background:rgba(56,225,255,.08);color:var(--cyan);font-weight:700;font-size:14px}
+.hero h1{font-size:clamp(40px,7vw,78px);font-weight:800;line-height:1.1;margin:22px 0 18px;letter-spacing:-1px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--az),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{max-width:640px;margin:0 auto;color:var(--mist);font-size:19px}
+.cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+.small{color:var(--mist);font-size:14px;margin-top:16px}
+/* app preview */
+.shot{margin:60px auto 0;max-width:900px;border-radius:22px;border:1px solid var(--line2);background:linear-gradient(160deg,#0f2248,#0a1530);box-shadow:0 50px 100px -30px rgba(47,139,255,.45);overflow:hidden;direction:ltr;text-align:left}
+.shot .bar{display:flex;gap:7px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.shot .bar i{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.18)}
+.shot .body{display:grid;grid-template-columns:78px 1fr;min-height:300px}
+.side{border-inline-end:1px solid var(--line);padding:16px 10px;display:flex;flex-direction:column;gap:10px;align-items:center;background:rgba(5,10,21,.4)}
+.side i{width:40px;height:40px;border-radius:12px;background:rgba(130,175,255,.1)}
+.side i:first-child{background:rgba(47,139,255,.35);box-shadow:inset 3px 0 0 var(--cyan)}
+.main{padding:34px 36px;display:flex;flex-direction:column;justify-content:flex-end;gap:12px;background:radial-gradient(60% 80% at 90% 0,rgba(47,139,255,.35),transparent)}
+.main .tag{display:flex;gap:8px}
+.main .tag span{padding:3px 12px;border-radius:99px;background:rgba(47,139,255,.2);border:1px solid rgba(47,139,255,.5);font-size:13px;font-weight:700}
+.main h4{font-size:40px;font-weight:800;line-height:1.1}
+.main .play{align-self:flex-start;margin-top:8px;padding:15px 54px;border-radius:40px;font-size:22px;font-weight:800;color:#04101f;background:linear-gradient(135deg,#7cc4ff,var(--cyan))}
+section{padding:70px 0}
+h2{font-size:clamp(28px,4vw,42px);font-weight:800;text-align:center;margin-bottom:10px}
+.sec-sub{text-align:center;color:var(--mist);max-width:600px;margin:0 auto 42px;font-size:17px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.card{padding:26px;border-radius:22px;background:var(--panel);border:1px solid var(--line);transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--line2);transform:translateY(-3px)}
+.card .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:16px;background:linear-gradient(135deg,rgba(47,139,255,.3),rgba(56,225,255,.18));color:var(--cyan)}
+.card h3{font-size:19px;margin-bottom:6px}
+.card p{color:var(--mist);font-size:15.5px}
+.chips{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.chips span{padding:10px 22px;border-radius:99px;border:1px solid var(--line2);background:var(--panel);font-weight:700;font-size:17px}
+.dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.dl a.card{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.dl .os{font-size:22px;font-weight:800}
+.dl small{color:var(--mist);font-size:14px}
+.dl .go{margin-top:12px;display:inline-flex;gap:8px;align-items:center;color:var(--cyan);font-weight:700}
+.dl a.me{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan) inset}
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.steps div{padding:24px;border-radius:20px;border:1px dashed var(--line2);position:relative}
+.steps div::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--az);color:#04101f;font-weight:800;margin-bottom:12px}
+.steps p{color:var(--mist)}
+.os-box{margin-top:50px;padding:42px 30px;border-radius:26px;text-align:center;background:linear-gradient(160deg,rgba(47,139,255,.18),rgba(56,225,255,.06));border:1px solid var(--line2)}
+.os-box p{color:var(--mist);max-width:560px;margin:8px auto 24px}
+footer{border-top:1px solid var(--line);padding:30px 0;color:var(--mist);font-size:14.5px;text-align:center}
+@media(max-width:640px){.links a{display:none}.shot .body{grid-template-columns:54px 1fr}.main h4{font-size:30px}.hero{padding-top:56px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"><i></i><i></i></div>
+
+<nav><div class="wrap">
+  <a class="logo" href="#"><b><svg viewBox="0 0 24 24"><path d="M12 3 5 20h3l4-10 4 10h3z"/></svg></b>Azure Launcher</a>
+  <div class="links">
+    <a href="#features" data-ar="المميزات" data-en="Features">المميزات</a>
+    <a href="#download" data-ar="التحميل" data-en="Download">التحميل</a>
+    <a href="https://github.com/meqdad67/azureluancher" target="_blank" rel="noopener">GitHub</a>
+    <button id="lang" aria-label="Language">English</button>
+  </div>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <span class="pill"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6 .7-4.4 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.4 9.3l6-.7z"/></svg><span data-ar="مفتوح المصدر ومجاني للأبد" data-en="Free &amp; open source, forever">مفتوح المصدر ومجاني للأبد</span></span>
+  <h1><span data-ar="العب ماين كرافت" data-en="Play Minecraft">العب ماين كرافت</span><br><em data-ar="بأسلوب Azure" data-en="the Azure way">بأسلوب Azure</em></h1>
+  <p class="lead" data-ar="لانشر عصري وسريع يدعم كل الإصدارات واللودرز، ويثبّت المودات من Modrinth و CurseForge بضغطة، بواجهة عربي وإنجليزي." data-en="A fast, modern launcher for every version and loader. Install mods from Modrinth and CurseForge in one click, in Arabic or English.">لانشر عصري وسريع يدعم كل الإصدارات واللودرز، ويثبّت المودات من Modrinth و CurseForge بضغطة، بواجهة عربي وإنجليزي.</p>
+  <div class="cta">
+    <a class="btn pri" id="mainDl" href="https://github.com/meqdad67/azureluancher/releases/latest"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg><span id="mainDlT">تحميل اللانشر</span></a>
+    <a class="btn" href="https://github.com/meqdad67/azureluancher" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><span data-ar="الكود على GitHub" data-en="View on GitHub">الكود على GitHub</span></a>
+  </div>
+  <p class="small" id="ver" data-ar="Windows • macOS • Linux" data-en="Windows • macOS • Linux">Windows • macOS • Linux</p>
+
+  <div class="shot" aria-hidden="true">
+    <div class="bar"><i></i><i></i><i></i></div>
+    <div class="body"><div class="side"><i></i><i></i><i></i><i></i></div>
+      <div class="main"><div class="tag"><span>1.21.1</span><span style="background:rgba(130,175,255,.1);border-color:rgba(130,175,255,.3)">Fabric</span></div><h4>Survival Server</h4><div class="play">▶ Play</div></div></div>
+  </div>
+</div></header>
+
+<section id="features"><div class="wrap">
+  <h2 data-ar="كل شي تحتاجه في لانشر واحد" data-en="Everything in one launcher">كل شي تحتاجه في لانشر واحد</h2>
+  <p class="sec-sub" data-ar="مصمم عشان يكون خفيف وسهل ومرتب، من أول تشغيل." data-en="Built to be light, simple and tidy from the very first launch.">مصمم عشان يكون خفيف وسهل ومرتب، من أول تشغيل.</p>
+  <div class="grid">
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/></svg></div><h3 data-ar="كل الإصدارات" data-en="Every version">كل الإصدارات</h3><p data-ar="Release و Snapshot وحتى الإصدارات القديمة، كل نسخة بمجلد ومودات مستقلة." data-en="Releases, snapshots and old versions, each instance with its own folder and mods.">Release و Snapshot وحتى الإصدارات القديمة، كل نسخة بمجلد ومودات مستقلة.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M10 4a2 2 0 1 1 4 0v1h4v4h-1a2 2 0 1 0 0 4h1v4h-4v-1a2 2 0 1 0-4 0v1H6v-4h1a2 2 0 1 0 0-4H6V5h4z"/></svg></div><h3 data-ar="تثبيت المودات بضغطة" data-en="One-click mods">تثبيت المودات بضغطة</h3><p data-ar="تصفّح Modrinth و CurseForge، والنتائج تتفلتر على إصدارك ولودرك، مع تنزيل المتطلبات تلقائي." data-en="Browse Modrinth and CurseForge. Results match your version and loader, dependencies included.">تصفّح Modrinth و CurseForge، والنتائج تتفلتر على إصدارك ولودرك، مع تنزيل المتطلبات تلقائي.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><h3 data-ar="Microsoft أو Offline" data-en="Microsoft or Offline">Microsoft أو Offline</h3><p data-ar="سجّل بحسابك الأصلي أو العب بأي اسم تختاره، وأضف أكثر من حساب وبدّل بينها." data-en="Sign in with Microsoft or play offline under any name. Add as many accounts as you like.">سجّل بحسابك الأصلي أو العب بأي اسم تختاره، وأضف أكثر من حساب وبدّل بينها.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M7 7h10v10H7zM9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"/></svg></div><h3 data-ar="تحكم كامل بالرام" data-en="Full RAM control">تحكم كامل بالرام</h3><p data-ar="حدد أقصى رام تستخدمها اللعبة حتى رام جهازك، بشكل عام أو لكل نسخة." data-en="Set the maximum RAM up to your system's total, globally or per instance.">حدد أقصى رام تستخدمها اللعبة حتى رام جهازك، بشكل عام أو لكل نسخة.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg></div><h3 data-ar="Java تلقائي" data-en="Automatic Java">Java تلقائي</h3><p data-ar="اللانشر ينزّل Java المناسب لكل إصدار بنفسه، ما تحتاج تثبّت شي." data-en="The launcher downloads the right Java for each version. Nothing to install by hand.">اللانشر ينزّل Java المناسب لكل إصدار بنفسه، ما تحتاج تثبّت شي.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 5h18M3 12h18M3 19h18M8 3v4M16 10v4M10 17v4"/></svg></div><h3 data-ar="عربي وإنجليزي" data-en="Arabic &amp; English">عربي وإنجليزي</h3><p data-ar="واجهة تدعم العربية بالكامل (من اليمين لليسار) مع تبديل فوري، وألوان تختارها بنفسك." data-en="Full right-to-left Arabic support with instant switching, plus accent colors of your choice.">واجهة تدعم العربية بالكامل (من اليمين لليسار) مع تبديل فوري، وألوان تختارها بنفسك.</p></div>
+  </div>
+  <div class="chips" style="margin-top:42px"><span>Vanilla</span><span>Fabric</span><span>Quilt</span><span>Forge</span><span>NeoForge</span></div>
+</div></section>
+
+<section id="download"><div class="wrap">
+  <h2 data-ar="حمّل Azure Launcher" data-en="Download Azure Launcher">حمّل Azure Launcher</h2>
+  <p class="sec-sub" data-ar="اختر نظامك. الملفات تنزل مباشرة من صفحة الإصدارات على GitHub." data-en="Pick your system. Files come straight from the GitHub releases page.">اختر نظامك. الملفات تنزل مباشرة من صفحة الإصدارات على GitHub.</p>
+  <div class="dl">
+    <a class="card" data-os="win" href="https://github.com/meqdad67/azureluancher/releases/latest"><span class="os">Windows</span><small data-ar="مثبّت .exe مع اختصارات" data-en="Installer (.exe) with shortcuts">مثبّت .exe مع اختصارات</small><span class="go"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg><span data-ar="تحميل" data-en="Download">تحميل</span></span></a>
+    <a class="card" data-os="mac" href="https://github.com/meqdad67/azureluancher/releases/latest"><span class="os">macOS</span><small data-ar="ملف .dmg" data-en="Disk image (.dmg)">ملف .dmg</small><span class="go"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg><span data-ar="تحميل" data-en="Download">تحميل</span></span></a>
+    <a class="card" data-os="linux" href="https://github.com/meqdad67/azureluancher/releases/latest"><span class="os">Linux</span><small data-ar="AppImage أو deb" data-en="AppImage or deb">AppImage أو deb</small><span class="go"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg><span data-ar="تحميل" data-en="Download">تحميل</span></span></a>
+  </div>
+  <h2 style="margin-top:70px" data-ar="ثلاث خطوات وتلعب" data-en="Three steps to play">ثلاث خطوات وتلعب</h2>
+  <div class="steps" style="margin-top:30px">
+    <div><h3 data-ar="ثبّت اللانشر" data-en="Install the launcher">ثبّت اللانشر</h3><p data-ar="شغّل الملف اللي حملته. لو ظهر تحذير SmartScreen اضغط More info ثم Run anyway." data-en="Run the file you downloaded. If SmartScreen warns you, click More info, then Run anyway.">شغّل الملف اللي حملته. لو ظهر تحذير SmartScreen اضغط More info ثم Run anyway.</p></div>
+    <div><h3 data-ar="أضف حسابك" data-en="Add your account">أضف حسابك</h3><p data-ar="سجّل بحساب Microsoft أو سوّ حساب Offline بالاسم اللي تبيه." data-en="Sign in with Microsoft or create an offline account with any name.">سجّل بحساب Microsoft أو سوّ حساب Offline بالاسم اللي تبيه.</p></div>
+    <div><h3 data-ar="سوّ نسخة والعب" data-en="Create an instance and play">سوّ نسخة والعب</h3><p data-ar="اختر الإصدار واللودر، ثبّت مودّاتك، واضغط العب." data-en="Pick a version and loader, add your mods, hit Play.">اختر الإصدار واللودر، ثبّت مودّاتك، واضغط العب.</p></div>
+  </div>
+
+  <div class="os-box">
+    <h2 style="font-size:clamp(24px,3vw,34px)" data-ar="مفتوح المصدر 100%" data-en="100% open source">مفتوح المصدر 100%</h2>
+    <p data-ar="الكود كامل على GitHub، تقدر تقرأه وتعدّل عليه وتشارك بتحسينات، أو تبلّغ عن أي مشكلة." data-en="All the code is on GitHub. Read it, fork it, send improvements, or report any issue.">الكود كامل على GitHub، تقدر تقرأه وتعدّل عليه وتشارك بتحسينات، أو تبلّغ عن أي مشكلة.</p>
+    <div class="cta" style="margin-top:0">
+      <a class="btn pri" style="font-size:17px;padding:14px 28px" href="https://github.com/meqdad67/azureluancher" target="_blank" rel="noopener">⭐ <span data-ar="افتح الريبو" data-en="Open the repo">افتح الريبو</span></a>
+      <a class="btn" href="https://github.com/meqdad67/azureluancher/issues" target="_blank" rel="noopener"><span data-ar="الإبلاغ عن مشكلة" data-en="Report an issue">الإبلاغ عن مشكلة</span></a>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap"><span data-ar="Azure Launcher لانشر مستقل وغير تابع لـ Mojang أو Microsoft. Minecraft علامة تجارية لشركة Mojang." data-en="Azure Launcher is an independent project, not affiliated with Mojang or Microsoft. Minecraft is a trademark of Mojang.">Azure Launcher لانشر مستقل وغير تابع لـ Mojang أو Microsoft. Minecraft علامة تجارية لشركة Mojang.</span></div></footer>
+
+<script>
+(function(){
+  var REPO='meqdad67/azureluancher', RELEASES='https://github.com/'+REPO+'/releases/latest';
+  var lang='ar'; try{lang=localStorage.getItem('az-lang')||'ar'}catch(e){}
+  var ua=navigator.userAgent, os=/Windows/i.test(ua)?'win':/Mac/i.test(ua)?'mac':/Linux|X11/i.test(ua)?'linux':'win';
+  var NAMES={win:'Windows',mac:'macOS',linux:'Linux'};
+  var T={ar:{dl:'تحميل لـ ',gen:'تحميل اللانشر',lang:'English'},en:{dl:'Download for ',gen:'Download the launcher',lang:'العربية'}};
+  function apply(){
+    document.documentElement.lang=lang; document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+    document.querySelectorAll('[data-'+lang+']').forEach(function(el){el.innerHTML=el.getAttribute('data-'+lang)});
+    document.getElementById('lang').textContent=T[lang].lang;
+    document.getElementById('mainDlT').textContent=T[lang].dl+NAMES[os];
+  }
+  document.getElementById('lang').onclick=function(){lang=lang==='ar'?'en':'ar';try{localStorage.setItem('az-lang',lang)}catch(e){}apply()};
+  var me=document.querySelector('[data-os="'+os+'"]'); if(me) me.classList.add('me');
+  apply();
+  // direct links to the newest release assets (falls back to the releases page)
+  fetch('https://api.github.com/repos/'+REPO+'/releases/latest').then(function(r){return r.ok?r.json():null}).then(function(rel){
+    if(!rel||!rel.assets) return;
+    var pick={
+      win:function(a){return /\.exe$/i.test(a.name)&&!/portable/i.test(a.name)},
+      mac:function(a){return /\.dmg$/i.test(a.name)},
+      linux:function(a){return /\.AppImage$/i.test(a.name)}
+    };
+    var urls={};
+    Object.keys(pick).forEach(function(k){var a=rel.assets.filter(pick[k])[0]||(k==='win'&&rel.assets.filter(function(x){return /\.exe$/i.test(x.name)})[0]); if(a){urls[k]=a.browser_download_url; var c=document.querySelector('[data-os="'+k+'"]'); if(c)c.href=a.browser_download_url;}});
+    if(urls[os]) document.getElementById('mainDl').href=urls[os];
+    if(rel.tag_name) document.getElementById('ver').textContent=rel.tag_name+' • Windows • macOS • Linux';
+  }).catch(function(){});
+})();
+</script>
+</body>
+</html>
